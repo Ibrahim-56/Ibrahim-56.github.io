@@ -1,0 +1,29 @@
+
+:root {--bg:#F5F7FA;--text:#1A1A1A;--card:#FFFFFF;--accent:#4C7DF0;--muted:#6B7280;--fw:#0f5132;}
+html.dark {--bg:#111418;--text:#E6E6E6;--card:#1A1F24;--accent:#608DFF;--muted:#9CA3AF;--fw:#86efac;}
+html{background:var(--bg);color:var(--text);font-family:'Cairo',system-ui,sans-serif;}body{margin:0;}
+.container{max-width:1050px;padding:16px;margin:auto;}
+.nav{display:flex;align-items:center;justify-content:space-between;}
+.brand{display:flex;align-items:center;gap:14px;}
+.avatar{width:58px;height:58px;border-radius:50%;border:2px solid var(--accent);} 
+.card{background:var(--card);padding:20px;border-radius:14px;margin:18px 0;box-shadow:0 4px 12px rgba(0,0,0,.06);} 
+.btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:8px;}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid #E5E7EB}
+.badges{display:flex;gap:8px;flex-wrap:wrap;padding:0;margin:0;list-style:none}
+.badge{background:#E2E8F0;color:#1A1A1A;padding:4px 10px;border-radius:999px;font-size:12px;display:inline-flex;align-items:center;gap:6px}
+.badge .dot{width:8px;height:8px;border-radius:50%}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.repo{background:var(--card);border:1px solid #E5E7EB;border-radius:10px;padding:14px;text-decoration:none;color:var(--text)}
+.repo h3{margin:4px 0 8px}
+.meta{font-size:13px;color:var(--muted);display:flex;gap:8px}
+.frameworks{margin-top:6px;color:var(--fw);font-size:13px}
+.frameworks b{color:var(--fw)}
+.timeline{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}
+.timeline-item{border-inline-start:3px solid var(--accent);padding-inline-start:12px}
+.logos{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.logo{height:28px}
+.actions{display:flex;gap:10px}
+footer.footer{display:flex;justify-content:space-between;align-items:center;color:var(--muted);margin-bottom:20px}
+.icon{width:18px;height:18px;vertical-align:middle}
+.switcher{display:flex;gap:8px}
+.repo .badges{margin-top:8px}
