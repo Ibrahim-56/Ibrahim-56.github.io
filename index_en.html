@@ -1,128 +1,83 @@
-
-<!doctype html><html lang='en' dir='ltr'><head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'>
-<title>Ibrahim — Software Engineer</title>
-<link href='https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap' rel='stylesheet'>
-<link rel='stylesheet' href='assets/styles.css'>
-</head><body>
-<header class='container'><nav class='nav'>
-  <div class='brand'>
-    <img src='https://github.com/Ibrahim-56.png' class='avatar' alt='avatar'>
-    <div><h1>@Ibrahim-56</h1><p>Software Engineer • Testing • Python • Oracle/OCI</p></div>
-  </div>
-  <div class='actions'>
-    <a class='btn ghost' href='index.html'>AR</a>
-    <button id='themeToggle' class='btn ghost'><img class='icon' src='assets/icons/moon.svg' alt='theme'></button>
-    <a class='btn' href='https://github.com/Ibrahim-56' target='_blank' rel='noopener'>GitHub</a>
-  </div>
-</nav></header>
-<main class='container'>
-  <section class='card'>
-    <h2>About</h2>
-    <p>Experience in functional testing, backend solutions, and Oracle integrations with a focus on quality and operability.</p>
-    <ul class='badges'><li class='badge'><span class='dot' style='background:#3776ab'></span><span>Python</span></li><li class='badge'><span class='dot' style='background:#b07219'></span><span>Java</span></li><li class='badge'><span class='dot' style='background:#6B7280'></span><span>Oracle Fusion</span></li><li class='badge'><span class='dot' style='background:#3178c6'></span><span>OCI</span></li><li class='badge'><span class='dot' style='background:#6B7280'></span><span>Testing</span></li></ul>
-  </section>
-  <section class='card'>
-    <h2>Handpicked Projects</h2>
-    <div id='repos-en' class='grid'></div>
-  </section>
-  <section class='card'>
-    <h2>Certifications & Memberships</h2>
-    <div class='logos'>
-      <img class='logo' src='assets/logos/oci.svg' alt='OCI'>
-      <img class='logo' src='assets/logos/oracle.svg' alt='Oracle'>
-      <img class='logo' src='assets/logos/ibm.svg' alt='IBM'>
-      <img class='logo' src='assets/logos/fortinet.svg' alt='Fortinet'>
-      <img class='logo' src='assets/logos/dma.svg' alt='DMA'>
-    </div>
-    <ul class='timeline'>
-      <li><div class='timeline-item'><h3>Oracle Cloud Infrastructure — Foundations Associate</h3><p>OCI fundamentals and cloud basics.</p></div></li>
-      <li><div class='timeline-item'><h3>Oracle Fusion Cloud — Process Essentials (HCM/ERP/SCM)</h3><p>Understanding enterprise Fusion processes & integrations.</p></div></li>
-      <li><div class='timeline-item'><h3>IBM — Full Stack Software Developer</h3><p>Professional track covering front/back-end and DevOps basics.</p></div></li>
-      <li><div class='timeline-item'><h3>Fortinet — Certified Associate (FCA)</h3><p>Foundations of network/app security.</p></div></li>
-      <li><div class='timeline-item'><h3>Member — Data Management Association (DMA)</h3><p>Professional membership in data management & decision support, accredited by DMA Saudi.</p></div></li>
-    </ul>
-  </section>
-  <section class='card'>
-    <h2>Contact</h2>
-    <div class='switcher'>
-      <a class='btn' href='mailto:Ibrahim.altamimi.53@gmail.com'><img class='icon' src='assets/icons/email.svg' alt='email'> Email</a>
-      <a class='btn ghost' href='https://www.linkedin.com/in/ibrahim-al-tuwayhir-a92499201' target='_blank' rel='noopener'><img class='icon' src='assets/icons/linkedin.svg' alt='LinkedIn'> LinkedIn</a>
-    </div>
-  </section>
-</main>
-<footer class='container footer'><span>© Ibrahim — Software Engineer</span></footer>
-
-<script>
-const BADGE_COLORS={
-  'JavaScript':'#f7df1e','TypeScript':'#3178c6','Python':'#3776ab','Java':'#b07219',
-  'PHP':'#4F5B93','Go':'#00ADD8','C#':'#178600','C++':'#00599C','HTML':'#e34f26','CSS':'#563d7c',
-  'Docker':'#0db7ed','Nginx':'#009639','SOAP':'#6B7280','MySQL':'#00758f','Node.js':'#3C873A','React':'#61DAFB',
-  'Oracle Fusion':'#A91D22'
-};
-const FRAMEWORK_KEYS=['React','Node.js','Oracle Fusion','Docker','Nginx','MySQL','PHP','Java','Python','TypeScript','JavaScript'];
-function makeBadge(label,color){
-  const span=document.createElement('span');span.className='badge';
-  const dot=document.createElement('span');dot.className='dot';dot.style.background=color||'#E2E8F0';
-  const text=document.createElement('span');text.textContent=label;span.appendChild(dot);span.appendChild(text);return span;
-}
-function normalizeTopic(t){
-  let key=t; if(/oracle|fusion|hcm/i.test(t)) key='Oracle Fusion';
-  if(/node/i.test(t)) key='Node.js';
-  if(/react/i.test(t)) key='React';
-  if(/docker/i.test(t)) key='Docker';
-  if(/nginx/i.test(t)) key='Nginx';
-  if(/mysql/i.test(t)) key='MySQL';
-  if(/soap/i.test(t)) key='SOAP';
-  if(/php/i.test(t)) key='PHP';
-  return key;
-}
-async function fetchRepoDetails(fullName){
-  const r=await fetch('https://api.github.com/repos/'+fullName,{headers:{'Accept':'application/vnd.github+json'}});
-  const j=await r.json();
-  return {topics:j.topics||[], language:j.language};
-}
-async function loadDynamicRepos(user, containerId){
-  const container=document.getElementById(containerId);
-  const resp=await fetch('https://api.github.com/users/'+user+'/repos?sort=updated&per_page=12',{headers:{'Accept':'application/vnd.github+json'}});
-  let data=await resp.json();
-  data=data.filter(r=>r.name!== 'Express-Book-Reviews');
-  container.innerHTML='';
-  for(const r of data.slice(0,6)){
-    const details=await fetchRepoDetails(r.full_name);
-    const possible=new Set();
-    if(details.language) possible.add(details.language);
-    (details.topics||[]).forEach(t=>possible.add(t));
-    const mapped=[...possible].map(normalizeTopic);
-    const uniq=[]; mapped.forEach(m=>{ if(!uniq.includes(m)) uniq.push(m); });
-
-    const a=document.createElement('a');a.className='repo';a.href=r.html_url;a.target='_blank';a.rel='noopener';
-    a.innerHTML='<h3>'+r.name+'</h3><p>'+(r.description||'—')+'</p>'+
-                '<div class="meta">'+
-                '<span>★ '+r.stargazers_count+'</span><span>⚑ '+r.forks_count+'</span>'+ 
-                '<span>⬆︎ '+(r.updated_at||'').slice(0,10)+'</span><span>'+(details.language||'')+'</span></div>';
-
-    const badges=document.createElement('div');badges.className='badges';
-    uniq.forEach(k=>{ const color=BADGE_COLORS[k]; if(color) badges.appendChild(makeBadge(k,color)); });
-    a.appendChild(badges);
-
-    const frameworksLine=document.createElement('div');frameworksLine.className='frameworks';
-    const frameworks=uniq.filter(k=>FRAMEWORK_KEYS.includes(k));
-    if(frameworks.length){ frameworksLine.innerHTML='<b>Frameworks/Tech:</b> '+frameworks.join(' · '); a.appendChild(frameworksLine); }
-
-    container.appendChild(a);
-  }
-}
-
-function initTheme(){
-  const t=document.getElementById('themeToggle');
-  if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');
-  t.onclick=function(){document.documentElement.classList.toggle('dark');localStorage.setItem('theme',document.documentElement.classList.contains('dark')?'dark':'light');};
-}
-</script>
-
-<script>
-initTheme();
-loadDynamicRepos('Ibrahim-56','repos-en');
-</script>
-</body></html>
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ibrahim's software portfolio featuring software testing, backend development, and enterprise integration projects.">
+  <title>Ibrahim | Software & QA Projects</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="container nav">
+    <a class="brand" href="index_en.html">
+      <img class="avatar" src="https://github.com/Ibrahim-56.png" alt="Profile picture">
+      <span><strong>Ibrahim</strong><small>Software Engineering</small></span>
+    </a>
+    <nav class="actions" aria-label="Main navigation">
+      <a class="button secondary" href="index.html" lang="ar">العربية</a>
+      <a class="button" href="https://github.com/Ibrahim-56" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">Software Engineering Graduate</p>
+      <h1>Practical projects in software and quality</h1>
+      <p class="lead">A selected collection of projects and prototypes covering software testing, backend development, and enterprise integration. Some repositories are learning or portfolio exercises rather than production systems.</p>
+      <div class="actions">
+        <a class="button" href="https://github.com/Ibrahim-56?tab=repositories">Browse repositories</a>
+        <a class="button secondary" href="https://www.linkedin.com/in/ibrahim-al-tuwayhir-a92499201/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-heading"><h2>Selected projects</h2><p>Selected for clarity of purpose and relevance to practical technical skills.</p></div>
+      <div class="grid">
+        <article class="project">
+          <p class="tag">Full stack</p><h3>Customer Feedback Dashboard</h3>
+          <p>A customer feedback dashboard using React, TypeScript, NestJS, and PostgreSQL. The repository documentation also describes Docker and monitoring/caching components.</p>
+          <p class="stack">React · TypeScript · NestJS · PostgreSQL</p>
+          <a class="project-link" href="https://github.com/Ibrahim-56/Customer-Feedback-Dashboard">Repository & docs ↗</a>
+        </article>
+        <article class="project">
+          <p class="tag">Quality assurance</p><h3>Saudi Digital Banking QA Framework</h3>
+          <p>Test-planning artifacts, a sample UI automation test, and notes for API testing and data validation. The scenario simulates a digital account-opening flow.</p>
+          <p class="stack">Java · Selenium · TestNG · Postman · SQL</p>
+          <a class="project-link" href="https://github.com/Ibrahim-56/Saudi-Digital-banking-QA-framework">Repository & docs ↗</a>
+        </article>
+        <article class="project">
+          <p class="tag">Enterprise integration</p><h3>Oracle HCM SOAP API App</h3>
+          <p>An application prototype exploring integration with Oracle HCM through SOAP APIs. Check the README for setup requirements before trying it.</p>
+          <p class="stack">Oracle HCM · SOAP · JavaScript</p>
+          <a class="project-link" href="https://github.com/Ibrahim-56/Full-Stack-App-with-Oracle-HCM-SOAP-API">Repository & docs ↗</a>
+        </article>
+        <article class="project">
+          <p class="tag">Web application</p><h3>Employee Task Management System</h3>
+          <p>A PHP and MySQL application for task and user management, including roles, priorities, deadlines, and notifications.</p>
+          <p class="stack">PHP · MySQL · XAMPP</p>
+          <a class="project-link" href="https://github.com/Ibrahim-56/Employee-Task-Management-System-using-PHP-and-MySQL">Repository & docs ↗</a>
+        </article>
+        <article class="project">
+          <p class="tag">Backend / API</p><h3>FastAPI Rate Limiting</h3>
+          <p>A Python project exploring application structure, request rate limiting, and tests using pytest.</p>
+          <p class="stack">Python · FastAPI · pytest · Docker</p>
+          <a class="project-link" href="https://github.com/Ibrahim-56/Middleware-by-Building-a-FastAPI-Rate-Limiting">Repository & docs ↗</a>
+        </article>
+        <article class="project">
+          <p class="tag">Data visualization</p><h3>Financial Dashboard</h3>
+          <p>An interactive dashboard built with Streamlit, Pandas, and Plotly using a synthetic financial dataset for demonstration.</p>
+          <p class="stack">Python · Streamlit · Pandas · Plotly</p>
+          <a class="project-link" href="https://github.com/Ibrahim-56/financial-dashboard">Repository & docs ↗</a>
+        </article>
+      </div>
+    </section>
+    <section class="section skills">
+      <div class="section-heading"><h2>Areas & technologies</h2><p>Technologies vary by repository and project scope.</p></div>
+      <div class="skill-list"><span>Functional testing</span><span>API testing</span><span>Selenium</span><span>TestNG</span><span>Postman</span><span>SQL</span><span>Python</span><span>Java</span><span>TypeScript</span><span>REST & SOAP</span><span>PostgreSQL</span><span>Docker</span><span>GitHub Actions</span></div>
+    </section>
+    <section class="contact">
+      <h2>Contact</h2><p>For professional details, see GitHub or LinkedIn.</p>
+      <div class="actions"><a class="button" href="https://github.com/Ibrahim-56" target="_blank" rel="noopener noreferrer">GitHub</a><a class="button secondary" href="https://www.linkedin.com/in/ibrahim-al-tuwayhir-a92499201/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a class="button secondary" href="mailto:Ibrahim.altamimi.53@gmail.com">Email</a></div>
+    </section>
+  </main>
+  <footer class="container footer">Ibrahim · Technical portfolio · <a href="index.html" lang="ar">النسخة العربية</a></footer>
+</body>
+</html>
